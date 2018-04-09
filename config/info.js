@@ -1,6 +1,6 @@
 const info = {
     //域名
-    domain: "https://xxx.com",
+    domain: "https://",
     //博客名称
     websiteTitle: "小骆博客",
     //首页名称
@@ -18,7 +18,7 @@ const info = {
     //发件邮箱
     stmpEmail: "xxx@xxx.cn",
     //发件邮箱密码
-    stmpEmailPass: "xxxxx",
+    stmpEmailPass: "123456",
     //邮箱port
     stmpPort: 465,
     //邮箱host
