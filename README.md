@@ -20,6 +20,9 @@ create database `najeh` default character set utf8 collate utf8_general_ci;
 
 ## 截图
 
+![](https://github.com/imNajeh/Koa2-Blog/blob/master/public/images/home.PNG)
+![](https://github.com/imNajeh/Koa2-Blog/blob/master/public/images/login.PNG)
+![](https://github.com/imNajeh/Koa2-Blog/blob/master/public/images/article.PNG)
 
 ## 部分功能使用到的模块
 
