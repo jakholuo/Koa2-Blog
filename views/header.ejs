@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<title><% if(type == 'photo'){ %>相册 - <%- websiteTitle %><% }%><% if(type == 'img'){ %>图床 - <%- websiteTitle %><% }%><% if(type == 'uploadimg'){ %>上传图片 - <%- websiteTitle %><% }%><% if(type == 'create'){ %>新文章 - <%- websiteTitle %><% }%><% if(type == 'edit'){ %>编辑文章 - <%- websiteTitle %><% }%><% if(type == 'signin'){ %>登录 - <%- websiteTitle %><% }%><% if(type == 'all'){ %><%- websiteIndexTitle %><% }%><% if(type == 'post'){ %><%- posts.title %> - <%- websiteTitle %><% }%><% if(type == 'page'){ %><%- pages.title %> - <%- websiteTitle %><% }%><% if(type == 'createpage'){ %>新页面 - <%- websiteTitle %><% }%><% if(type == 'editpage'){ %>编辑页面 - <%- websiteTitle %><% }%></title>
+    <meta charset='utf-8' />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="/favicon.ico"/>
+	<link rel="stylesheet" href="/rexo.css" />
+	<script src="/jquery.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Cairo:300,400,700|Droid+Sans+Mono" rel="stylesheet">
+	<meta name="description" content="<% if(type == 'all'){ %><%-websiteDescription %><% }%><% if(type == 'post'){ %><%- posts.title %> - <%- Summary %>...<% }%><% if(type == 'page'){ %><%- pages.title %> - <%- websiteTitle %><% }%><% if(type == 'photo'){ %>相册 - <%- websiteTitle %><% }%>" />
+	<% if(type == 'post'){ %>
+		<link href="https://cdn.bootcss.com/highlight.js/9.10.0/styles/solarized-light.min.css" rel="stylesheet">
+		<script src='https://cdn.bootcss.com/highlight.js/9.9.0/highlight.min.js'></script>
+		<script src='https://cdn.bootcss.com/highlight.js/9.8.0/languages/javascript.min.js'></script>
+		<script>hljs.initHighlightingOnLoad();</script>
+		<% }%>
+			<script>
+				function fade(txt) {
+					$('.message').text(txt)
+					$('.message').animate({
+						top: 0
+					})
+					setTimeout(function () {
+						$('.message').animate({
+							top: '-100%'
+						})
+					}, 1500)
+				}
+				$(function () {
+					$('.signout').click(() => {
+						$.ajax({
+							url: "/signout",
+							type: "GET",
+							cache: false,
+							dataType: 'json',
+							success: function (msg) {
+								if (msg) {
+									fade('登出成功')
+									setTimeout(() => {
+										window.location.href = "/"
+									}, 1500)
+								}
+							},
+							error: function () {
+								alert('异常');
+							}
+						})
+					})
+				})
+			</script>
+</head>
+
+<body>
+		<div class="message">登录成功</div>
+		<header>
+
+			<div class='description'>
+				<div style="background-image: url(<%- avator %>); width: 128px; height: 128px; background-size: cover; border-radius: 50%; margin: 0 auto;">
+				</div>
+				<p class='name'><%- myUsername %></p>
+				<p class='desc'><%- indexDescription %></p>
+			</div>
+			
+			<%  if(session.user){ %>
+				<nav>
+						<ul class='nav'>
+								<li class='nav-item'>
+					<a href="/">主页</a>
+					</li>
+					<li class='nav-item'>
+						<a href="/photo">相册</a>
+						</li>
+					<% if(type == 'all'){ %>
+						<% pagesArr.forEach(function(res){ %>
+							<li class='nav-item'>
+							<a href="/s/<%- res.linkname %>">
+								<%- res.title %>
+							</a>
+							</li>
+							<% }) %>
+								<% }%>
+									<% if(type == 'page'){ %>
+										<% pagesArr.forEach(function(res){ %>
+											<li class='nav-item'>
+											<a href="./<%- res.linkname %>">
+												<%- res.title %>
+											</a>
+										</li>
+											<% }) %>
+												<% }%>
+												<% if(type == 'post'){ %>
+													<% pagesArr.forEach(function(res){ %>
+														<li class='nav-item'>
+														<a href="/s/<%- res.linkname %>">
+															<%- res.title %>
+														</a>
+													</li>
+														<% }) %>
+															<% }%>
+															<% if(type == 'photo'){ %>
+																<% pagesArr.forEach(function(res){ %>
+																	<li class='nav-item'>
+																	<a href="/s/<%- res.linkname %>">
+																		<%- res.title %>
+																	</a>
+																</li>
+																	<% }) %>
+																		<% }%>
+												<li class='nav-item'>
+													<a href="/create">新文章</a>
+												</li>
+													<li class='nav-item'>
+													<a href="/createpage">新页面</a>
+												</li>
+													<li class='nav-item'>
+													<a href="/img">图床</a>
+												</li>
+													<li class='nav-item'>
+													<span class="signout">登出</span>
+												</li>
+												</ul>
+				</nav>
+				<% } %>
+					<% if(!session.user){ %>
+						<nav>
+								<ul class='nav'>
+										<li class='nav-item'>
+							<a href="/">主页</a>
+							</li>
+							<li class='nav-item'>
+								<a href="/photo">相册</a>
+								</li>
+							<% if(type == 'all'){ %>
+								<% pagesArr.forEach(function(res){ %>
+									<li class='nav-item'>
+									<a href="/s/<%- res.linkname %>">
+										<%- res.title %>
+									</a>
+									</li>
+									<% }) %>
+										<% }%>
+											<% if(type == 'page'){ %>
+												<% pagesArr.forEach(function(res){ %>
+													<li class='nav-item'>
+													<a href="./<%- res.linkname %>">
+														<%- res.title %>
+													</a>
+												</li>
+													<% }) %>
+														<% }%>
+														<% if(type == 'post'){ %>
+															<% pagesArr.forEach(function(res){ %>
+																<li class='nav-item'>
+																<a href="/s/<%- res.linkname %>">
+																	<%- res.title %>
+																</a>
+															</li>
+																<% }) %>
+																	<% }%>
+																	<% if(type == 'photo'){ %>
+																		<% pagesArr.forEach(function(res){ %>
+																			<li class='nav-item'>
+																			<a href="/s/<%- res.linkname %>">
+																				<%- res.title %>
+																			</a>
+																		</li>
+																			<% }) %>
+																				<% }%>
+													</ul>
+						</nav>
+						<% } %>
+		</header>

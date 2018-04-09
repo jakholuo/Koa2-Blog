@@ -1,0 +1,88 @@
+<%- include("header",{type:'photo'}) %>
+<div class="container" style="text-align:center;">
+        <h2 class="hr"><span>Photo</span></h2>
+        <% if(session.user){ %>
+        <a href="/uploadphoto">上传新图片</a>
+        <% }%>
+	<div class="img_list" style="text-decoration: none;">
+        <ul class="photo_list" style="list-style: none;width:100%;margin:0; padding:0;">
+            <% imgs.forEach(function(res){ %>
+                <li class="photo_wrap">
+                        <a href="/photos/<%- res.name %>.gif" title="<%- res.title %> - <%- res.moment %>"><img class="photo_item" src="/photos/<%- res.name %>.gif"></a>
+                        <% if(session.user){ %><span style="cursor:pointer;" onclick="delImg(<%- res.id %>,'<%- res.name %>')">删除</span><% }%>
+                </li>
+            <% }) %>
+        </ul>
+	</div>
+    <div id="page" class="pagenav pagination" >
+		
+    </div>
+    <script src="/pagination.js"></script>
+	<script>
+		pagination({
+			selector: '#page',
+			totalPage: <%= photosPageLength %>,
+			currentPage: 1,
+			prev: '上一页',
+			next: '下一页',
+			first: false,
+			last: false,
+			showTotalPage: true,
+			count: 2//当前页前后显示的数量
+		},function(val){
+			// 当前页
+			$.ajax({
+				url: "photo/page",
+				type: 'POST',
+				data:{
+					page: val
+				},
+				cache: false,
+				success: function (msg) {
+					// console.log(msg)
+					if (msg != 'error') {
+						$('.photo_list').html(' ')
+						$.each(msg,function(i,val){
+							//console.log(val.content)
+							$('.photo_list').append(
+                                '<li  class="photo_wrap"><a href="/photo/'+val.name+'.gif" title="'+val.title+" - "+val.moment+'"><img class="photo_item" src="/photos/'+val.name+'.gif"></a>'
+                                    <% if(session.user){ %>+' <span style="cursor:pointer;" onclick="delImg('+val.id+','+val.name+')">删除</span></li>'<% }%>
+							)
+						})
+					}else{
+						console.log('分页不存在')
+					} 
+				}
+			})
+		
+		})
+	</script>
+</div>
+<% if(session.user){ %>
+<script>
+    function delImg(id,name){
+        $.ajax({
+                url: "/photo/delete",
+                data: {id:id,name:name},
+                type: "POST",
+                cache: false,
+                dataType: 'json',
+                success: function (msg) {
+                    // console.log(msg)
+                    if (msg) {
+                        fade('删除成功')
+                        setTimeout(()=>{
+	               		window.location.href = "/photo"
+               		},1000)
+                    }else{
+                        fade('删除失败')
+                    }
+                },
+                error: function () {
+                    fade('服务器异常')
+                }
+            })	
+    }
+</script>
+<% }%>
+<%- include("footer",{type:'all'}) %>

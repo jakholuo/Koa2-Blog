@@ -1,0 +1,37 @@
+<%- include("header",{type:'page'}) %>
+	<div class='container'>
+		<div class='post-body'>
+            <h2 class="hr"><span><%= pages.linkname %></span></h2>
+			<%- pages.md %>
+		</div>
+		<p>
+				<% if(session.user ){ %>
+					<a href="<%= pages['linkname'] %>/edit">编辑</a>
+					<a class="delete_post">删除</a>
+					<% } %>
+			</p>
+			<% if(pages.hascom == 'true'){ %>
+                <%- include("comment",{type:'page'}) %>
+            <% }%>
+	</div>
+	
+    <script>
+        $('.delete_post').click(() => {
+            $.ajax({
+                url: "<%= pages.linkname %>/remove",
+                type: 'POST',
+                cache: false,
+                success: function (msg) {
+                    if (msg.data == 1) {
+                        fade('删除页面成功')
+                        setTimeout(() => {
+                            window.location.href = "/"
+                        }, 1000)
+                    } else {
+                        fade('删除页面失败')
+                    }
+                }
+            })
+        })
+    </script>
+		<%- include("footer",{type:'all'}) %>

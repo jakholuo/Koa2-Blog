@@ -1,0 +1,48 @@
+<%- include("header",{type:'editpage'}) %>
+<div class="container">
+	<form style="width:100%" class="form create" method="post">
+		<div>
+			<label>标题：</label>
+			<input placeholder="标题" type="text" name="title" value="<%- pagesTitle %>">
+		</div>
+		<div>
+			<label>链接（例如 xxx.com/s/about 填写about即可）：</label><br /> 
+			<input type="text" name="linkname" value="<%= pagesLinkname %>">
+		</div>
+		<div>
+		<div>
+			<label>内容：</label>
+			<textarea name="content" id="" cols="42" rows="10"><%= pagesContent %></textarea>
+		</div>
+		<div>
+			<input type="radio" name="hascom" value="true" <% if(pagesHascom === 'true'){ %>checked<% }%>>开启评论
+			<input type="radio" name="hascom" value="false"<% if(pagesHascom === 'false'){ %>checked<% }%>>关闭评论
+		</div>
+		<div class="submit">修改</div>
+	</form>
+</div>
+<script>
+	$('.submit').click(()=>{
+		$.ajax({
+            url: '',
+            data: $('.form').serialize(),
+            type: "POST",
+            cache: false,
+            dataType: 'json',
+            success: function (msg) {
+				if(msg == 'error' || !msg){
+					fade('修改失败')
+				}else if (msg) {
+               		fade('修改成功')
+               		setTimeout(()=>{
+	               		window.location.href = "/"
+               		},1000)
+               	} 
+            },
+            error: function () {
+                fade('服务器异常')
+            }
+        })		
+	})
+</script>
+<%- include("footer",{type:'all'}) %>

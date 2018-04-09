@@ -1,0 +1,119 @@
+<div id="comments">
+        <% if( comments_length==0  ){ %><% }else{ %>
+            <h3><%- comments_length %>条评论</h3>
+            <% } %>
+    <ul style="margin:1em 0;padding:0;">
+        <% comments.forEach(function(res){ %>
+            <li style="list-style-type:none;border-bottom: 1px dashed #ddd;">
+                <span>
+                    <a href="<%- res.website %>" target="_blank">
+                        <%- res.name %></a>：
+                </span>
+                <span>
+                    <% if(res.replyuser != ''){ %>
+                        <a href="#<%- res.reply %>">@<%- res.replyuser %></a>
+                        
+                            <% } %>
+                                <span name="<%- res.id %>" id="<%- res.id %>" ><%- res.content %></span>
+                </span>
+                <span style="color:#666;cursor:pointer;">
+                    <%- res.moment %>
+                </span>
+                <span style="color:#666;cursor:pointer;" onclick="replyComments(<%- res.id %>,'<%- res.name %>')">回复</span>
+                <% if(session.user  ){ %>
+                <span style="color:#666;cursor:pointer;" onclick="delComments(<%- res.id %>)">删除</span>
+                <% } %>
+            </li>
+            <% }) %>
+    </ul>
+    <h3>留下一条评论</h3>
+    <form style="width:100%" class="form create" method="post">
+        <div>
+                <% if(session.user  ){ %>
+                    <span>>>您已登录</span>
+                    <input type="hidden" name="name" value="<%- myUsername %>">
+                    <input type="hidden" name="email" value="<%- myEmail %>">
+                    <input type="hidden" name="website" value="">
+                    <% }else{ %>
+            <input class="commentc" placeholder="昵称：" type="text" name="name">
+            <input placeholder="邮箱：xxx@xxx.com" type="text" name="email">
+            <input placeholder="网址：http://" type="text" name="website">
+            <% } %>
+        </div>
+        <div>
+            <textarea placeholder="说点什么～" name="content" cols="42" rows="3"></textarea>
+        </div>
+        <div style="margin-bottom:.5em;">
+            <span class="reply"></span>
+            <span class="cancelReply" style="display:none;font-size:.9em;background-color:#999;color:#fff;padding:0 .4em;border-radius:.2em;cursor:pointer;">取消回复</span>
+            <input type="hidden" name="reply" value="0">
+        </div>
+        <div class="submit">提交评论</div>
+    </form>
+</div>
+<script>
+    function replyComments(id, name) {
+        if ($(".reply").html() == '') {
+            $('.reply').append('<span>回复' + name + '</span>')
+        } else {
+            $(".reply").html("");
+            $('.reply').append('<span>回复' + name + '</span>')
+        }
+        $("input[name=reply]").val(id);
+        $(".cancelReply").show()
+    }
+    $(".cancelReply").click(() => {
+        $(".reply").html("");
+        $("input[name=reply]").val('0');
+        $(".cancelReply").hide()
+    })
+    $('.submit').click(() => {
+        if ($('input[name=name]').val().trim() == '') {
+            fade('请输入昵称')
+        }else if ($('input[name=email]').val().trim() == '') {
+            fade('请输入邮箱')
+        }else if ($('textarea[name=content]').val().length > 140) {
+            fade('内容不能超过140字')
+        }else if ($('input[name=name]').val().length > 10) {
+            fade('昵称不能超过10字')
+        }else{
+            $.ajax({
+            url: "/comment/<% if(type == 'post'){ %><%- posts.id %><% } %><% if(type == 'page'){ %><%- pages.linkname %><% } %>/push",
+            data: $('.form').serialize(),
+            type: "POST",
+            cache: false,
+            dataType: 'json',
+            success: function (msg) {
+                if (msg) {
+                    fade('评论成功')
+                    setTimeout(() => {
+                        window.location.href = "<% if(type == 'post'){ %>/post/<%- posts.id %><% } %><% if(type == 'page'){ %>/s/<%- pages.linkname %><% } %>"
+                    }, 1000)
+                } else {
+                    fade('评论失败，可能是填写有误')
+                }
+            },
+            error: function () {
+                fade('服务器异常')
+            }
+        })
+        }
+    })
+    function delComments(id) {
+        $.ajax({
+            url: "/comment/" + id + "/remove",
+            type: 'POST',
+            cache: false,
+            success: function (msg) {
+                if (msg.data == 1) {
+                    fade('删除成功')
+                    setTimeout(() => {
+                        window.location.href = "<% if(type == 'post'){ %>/post/<%- posts.id %><% } %><% if(type == 'page'){ %>/s/<%- pages.linkname %><% } %>"
+                    }, 1000)
+                } else {
+                    fade('删除失败')
+                }
+            }
+        })
+    }
+</script>

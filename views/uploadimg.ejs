@@ -1,0 +1,52 @@
+<%- include("header",{type:'uploadimg'}) %>
+<script type="text/javascript" src="tools.js"></script>
+<script type="text/javascript" src="pictureHandle.js"></script>
+<div class="container">
+	<form style="width:100%" method="post" class="form create">
+		<div>
+			<label>上传图片：</label>
+			<input type="file" id="upFile">
+        </div>
+         <!--后台所要获取的文件base64-->
+    <input id="img" name="img" type="hidden"/>
+    <!--所选文件压缩后预览-->
+    <div>
+        <label>压缩后预览：</label>
+        <img src="" id="nextview" width="100%"/>
+    </div>
+    <div>
+        <label>图片地址：</label>
+			<input placeholder="不需要填写" type="text" id="returnUrl">
+    </div>
+		<div class="submit">上传</div>
+	</form>
+</div>
+<script>
+    $('.submit').click(()=>{
+        if ($('input[name=img]').val().trim() == '') {
+            fade('请选择图片')
+        }else{       
+            // console.log($('input[name=img]').val())   
+            $.ajax({
+                url: "/uploadimg/upload",
+                data: $('.form').serialize(),
+                type: "POST",
+                cache: false,
+                dataType: 'json',
+                success: function (msg) {
+                    // console.log(msg)
+                    if (msg.status) {
+                        fade('上传成功')
+                        $('#returnUrl').val(msg.imgurl);
+                    }else{
+                        fade('上传失败')
+                    }
+                },
+                error: function () {
+                    fade('服务器异常')
+                }
+            })			
+        }   
+    })
+</script>
+<%- include("footer",{type:'all'}) %>
