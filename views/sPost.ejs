@@ -1,40 +1,44 @@
 <%- include("header",{type:'post'}) %>
-	<div class='container'>
-		<div class='post-body'>
-			<h1 class='title'>
-				<%= posts.title %>
-			</h1>
-			<p class='date'>
-				<%= posts.moment %> / <%= posts.pv %> Views
-			</p>
-			<%- posts.content %>
-		</div>
+
+<div class="container">
+	<main role="main">
+		<article itemscope>
+			<h1 class="article-title" itemprop="headline"><%= posts.title %></h1>
+			<div class="article-meta">
+				<span>
+					<time itemprop="datePublished"><%= posts.moment %> / <%= posts.pv %> Views</time>
+				</span>
+			</div>
+			<section class="article" itemprop="entry-text">
+				<%- posts.content %>
+			</section>
+		</article>
 		<p>
-				<% if(session.user ){ %>
-					<a href="<%= posts['id'] %>/edit">编辑</a>
-					<a class="delete_post">删除</a>
-					<% } %>
-			</p>
-			<%- include("comment",{type:'post'}) %>
-	</div>
-	
-		<script>
-			$('.delete_post').click(() => {
-				$.ajax({
-					url: "<%= posts.id %>/remove",
-					type: 'POST',
-					cache: false,
-					success: function (msg) {
-						if (msg.data == 1) {
-							fade('删除文章成功')
-							setTimeout(() => {
-								window.location.href = "/"
-							}, 1000)
-						} else {
-							fade('删除文章失败')
-						}
+			<% if(session.user ){ %>
+				<a href="<%= posts['id'] %>/edit">编辑</a>
+				<a class="delete_post">删除</a>
+				<% } %>
+		</p>
+		<%- include("comment",{type:'post'}) %>
+	</main>
+	<script>
+		$('.delete_post').click(() => {
+			$.ajax({
+				url: "<%= posts.id %>/remove",
+				type: 'POST',
+				cache: false,
+				success: function (msg) {
+					if (msg.data == 1) {
+						fade('删除文章成功')
+						setTimeout(() => {
+							window.location.href = "/"
+						}, 1000)
+					} else {
+						fade('删除文章失败')
 					}
-				})
+				}
 			})
-		</script>
+		})
+	</script>
+</div>
 		<%- include("footer",{type:'post'}) %>

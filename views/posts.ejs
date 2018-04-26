@@ -1,61 +1,58 @@
 <%- include("header",{type:'all'}) %>
 
-<div class='container'>
-        <h2 class='hr'>
-            <span>Blog</span>
-        </h2>
-        <ul class='post-list non-style-list'>
 
-				<% posts.forEach(function(res){ %>
-					<li class='post-list-item'>
-						<a href="/post/<%= res.id %>"><%- res.title %></a> 
-						<span class='post-list-date'>(<%= res.moment %>)</span>
-					</li>
-				<% }) %>
-				
-		</ul>
-		<div id="page" class="pagenav pagination" ></div>
-		<script src="/pagination.js"></script>
-	<script>
-		pagination({
-			selector: '#page',
-			totalPage: <%= postsPageLength %>,
-			currentPage: 1,
-			prev: '上一页',
-			next: '下一页',
-			first: false,
-			last: false,
-			showTotalPage: true,
-			count: 2//当前页前后显示的数量
-		},function(val){
-			// 当前页
-			$.ajax({
-				url: "post/page",
-				type: 'POST',
-				data:{
-					page: val
-				},
-				cache: false,
-				success: function (msg) {
-					// console.log(msg)
-					if (msg != 'error') {
-						$('.post-list').html(' ')
-						$.each(msg,function(i,val){
-							//console.log(val.content)
-							$('.post-list').append(
-								'<li class="post-list-item">'+
-										'<a href="/post/'+val.id +'">'+val.title+'</a> '+
-						'<span class="post-list-date">('+val.moment+')</span></li>'
-							)
-						})
-					}else{
-						console.log('分页不存在')
-					} 
-				}
-			})
-		
+<main class="main" role="main">
+	<% posts.forEach(function(res){ %>
+		<article class="article" itemscope>
+			<span class="entry-meta">
+				<time itemprop="datePublished"><%= res.moment %></time>
+			</span>
+			<h2 class="entry-title" itemprop="headline">
+				<a href="/post/<%= res.id %>"><%- res.title %></a>
+			</h2>
+		</article>
+	<% }) %>
+</main>
+<div id="page" class="pagenav pagination" ></div>
+<script src="/pagination.js"></script>
+<script>
+	pagination({
+		selector: '#page',
+		totalPage: <%= postsPageLength %>,
+		currentPage: 1,
+		prev: '上一页',
+		next: '下一页',
+		first: false,
+		last: false,
+		showTotalPage: true,
+		count: 2//当前页前后显示的数量
+	},function(val){
+		// 当前页
+		$.ajax({
+			url: "post/page",
+			type: 'POST',
+			data:{
+				page: val
+			},
+			cache: false,
+			success: function (msg) {
+				// console.log(msg)
+				if (msg != 'error') {
+					$('.main').html(' ')
+					$.each(msg,function(i,val){
+						//console.log(val.content)
+						$('.main').append(
+							'<article class="article" itemscope><span class="entry-meta"><time itemprop="datePublished">'+val.moment+'</time></span><h2 class="entry-title" itemprop="headline"><a href="/post/'+val.id+'">'+val.title+'</a></h2></article>'
+						)
+					})
+				}else{
+					console.log('分页不存在')
+				} 
+			}
 		})
-	</script>
-    </div>
+	
+	})
+</script>
+
 <%- include("footer",{type:'all'}) %>
 

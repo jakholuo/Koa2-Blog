@@ -1,22 +1,21 @@
 <%- include("header",{type:'signin'}) %>
 	<div class="container">
 		<form class="form create" method="post ">
-			<div>
-				<label>账号：</label>
+			<div style="display: flex;justify-content: center;">
 				<input placeholder="用户名" type="text" name="name">
 			</div>
-			<div>
-				<label>密码：</label>
+			<div style="display: flex;justify-content: center;">
 				<input placeholder="密码" type="password" name="password">
 			</div>
-			<div>
-				<label>验证码：</label>
+			<div style="display: flex;justify-content: center;">
 				<input type="text" placeholder="验证码" name="code">
 			</div>
-			<div>
+			<div style="display: flex;justify-content: center;">
 				<img src="data:image/gif;base64,<%= code %>" style="width:140px;height:50px;">
 			</div>
-			<div class="submit">登录</div>
+			<div style="display: flex;justify-content: center;">
+				<div style="width: 260px" class="submit">登录</div>
+			</div>
 		</form>
 	</div>
 	<script>

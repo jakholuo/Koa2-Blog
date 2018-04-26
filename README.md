@@ -11,6 +11,10 @@
 * 后台登陆/验证码
 * IP请求次数限制
 
+## 2018.04.26 更新 - 修改界面
+
+重新设计了页面，更加简洁大气。
+
 ## 安装说明
 
 修改 config 文件夹下的 default.js 与 info.js 的相关配置。
@@ -32,6 +36,7 @@ create database `najeh` default character set utf8 collate utf8_general_ci;
 ![](https://github.com/imNajeh/Koa2-Blog/blob/master/public/images/home.PNG)
 ![](https://github.com/imNajeh/Koa2-Blog/blob/master/public/images/login.PNG)
 ![](https://github.com/imNajeh/Koa2-Blog/blob/master/public/images/article.PNG)
+![](https://github.com/imNajeh/Koa2-Blog/blob/master/public/images/photo.PNG)
 
 ## 部分功能使用到的模块
 

@@ -1,13 +1,12 @@
 <%- include("header",{type:'photo'}) %>
 <div class="container" style="text-align:center;">
-        <h2 class="hr"><span>Photo</span></h2>
         <% if(session.user){ %>
         <a href="/uploadphoto">上传新图片</a>
         <% }%>
 	<div class="img_list" style="text-decoration: none;">
-        <ul class="photo_list" style="list-style: none;width:100%;margin:0; padding:0;">
+        <ul class="photo_list" style="list-style: none;width:100%;margin:0; padding:0;display:flex;flex-wrap: wrap;">
             <% imgs.forEach(function(res){ %>
-                <li class="photo_wrap">
+                <li class="photo_wrap" style="flex:40%;">
                         <a href="/photos/<%- res.name %>.gif" title="<%- res.title %> - <%- res.moment %>"><img class="photo_item" src="/photos/<%- res.name %>.gif"></a>
                         <% if(session.user){ %><span style="cursor:pointer;" onclick="delImg(<%- res.id %>,'<%- res.name %>')">删除</span><% }%>
                 </li>
@@ -45,7 +44,7 @@
 						$.each(msg,function(i,val){
 							//console.log(val.content)
 							$('.photo_list').append(
-                                '<li  class="photo_wrap"><a href="/photo/'+val.name+'.gif" title="'+val.title+" - "+val.moment+'"><img class="photo_item" src="/photos/'+val.name+'.gif"></a>'
+                                '<li  class="photo_wrap" style="flex:40%;"><a href="/photo/'+val.name+'.gif" title="'+val.title+" - "+val.moment+'"><img class="photo_item" src="/photos/'+val.name+'.gif"></a>'
                                     <% if(session.user){ %>+' <span style="cursor:pointer;" onclick="delImg('+val.id+','+val.name+')">删除</span></li>'<% }%>
 							)
 						})

@@ -1,21 +1,24 @@
-<%- include("header",{type:'page'}) %>
-	<div class='container'>
-		<div class='post-body'>
-            <h2 class="hr"><span><%= pages.linkname %></span></h2>
-			<%- pages.md %>
-		</div>
+ <%- include("header",{type:'page'}) %>
+
+<div class="container">
+	<main role="main">
+		<article itemscope>
+			<h1 class="article-title" itemprop="headline"><%= pages.title %></h1>
+			<section class="article" itemprop="entry-text">
+				<%- pages.md %>
+			</section>
+		</article>
 		<p>
-				<% if(session.user ){ %>
-					<a href="<%= pages['linkname'] %>/edit">编辑</a>
-					<a class="delete_post">删除</a>
-					<% } %>
-			</p>
-			<% if(pages.hascom == 'true'){ %>
-                <%- include("comment",{type:'page'}) %>
-            <% }%>
-	</div>
-	
-    <script>
+            <% if(session.user ){ %>
+                <a href="<%= pages['linkname'] %>/edit">编辑</a>
+                <a class="delete_post">删除</a>
+                <% } %>
+        </p>
+        <% if(pages.hascom == 'true'){ %>
+            <%- include("comment",{type:'page'}) %>
+        <% }%>
+	</main>
+	<script>
         $('.delete_post').click(() => {
             $.ajax({
                 url: "<%= pages.linkname %>/remove",
@@ -34,4 +37,5 @@
             })
         })
     </script>
-		<%- include("footer",{type:'all'}) %>
+</div>
+<%- include("footer",{type:'all'}) %>
