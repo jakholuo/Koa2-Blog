@@ -16,7 +16,7 @@ const info = {
     //邮箱
     myEmail: "xxx@qq.com",
     //发件邮箱
-    stmpEmail: "xxx@xxx.com",
+    stmpEmail: "i@xxx.cn",
     //发件邮箱密码
     stmpEmailPass: "123456",
     //邮箱port

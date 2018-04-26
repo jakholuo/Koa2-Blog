@@ -31,6 +31,16 @@ create database `najeh` default character set utf8 collate utf8_general_ci;
 
 创建完数据库以后进入此目录 `node setup.js` 后即可根据下面信息创建管理员用户。
 
+## 运行
+
+```
+node index.js
+```
+后台地址：http://localhost:3000/signin
+
+默认账号：admin
+默认密码：123456
+
 ## 截图
 
 ![](https://github.com/imNajeh/Koa2-Blog/blob/master/public/images/home.PNG)
